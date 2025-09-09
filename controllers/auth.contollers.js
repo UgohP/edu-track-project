@@ -4,6 +4,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env.js";
 
+/**
+ * Api endpoint to signup a single user 
+ */
 // export const signup = async (req, res, next) => {
 //   const session = await mongoose.startSession();
 //   session.startTransaction();
@@ -41,6 +44,10 @@ import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env.js";
 //   }
 // };
 
+
+/**
+ * Api endpoint to signup users in bulk
+ */
 export const signup = async (req, res, next) => {
   const session = await mongoose.startSession();
   session.startTransaction();
