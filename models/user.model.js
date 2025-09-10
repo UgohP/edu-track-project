@@ -32,14 +32,14 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password") || !this.password) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
-});
+// UserSchema.pre("save", async function (next) {
+//   if (!this.isModified("password") || !this.password) return next();
+//   this.password = await bcrypt.hash(this.password, 10);
+//   next();
+// });
 
 UserSchema.methods.comparePassword = async function (candidate) {
-  return bcrypt.password(candidate, this.password);
+  return bcrypt.compare(candidate, this.password);
 };
 
 const User = mongoose.model("User", UserSchema);

@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env.js";
 
 /**
- * Api endpoint to signup a single user 
+ * Api endpoint to signup a single user
  */
 // export const signup = async (req, res, next) => {
 //   const session = await mongoose.startSession();
@@ -43,7 +43,6 @@ import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env.js";
 //     next(error);
 //   }
 // };
-
 
 /**
  * Api endpoint to signup users in bulk
@@ -109,6 +108,46 @@ export const signup = async (req, res, next) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    next(error);
+  }
+};
+
+/**
+ * Api endpoint to login a user in bulk
+ */
+export const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      let error = new Error("Invalid credentails");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const passwordMatch = await user.comparePassword(password);
+
+    if (!passwordMatch) {
+      let error = new Error("Incorrect password");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    let token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Login Successful",
+      data: {
+        token,
+        user,
+      },
+    });
+  } catch (error) {
     next(error);
   }
 };
