@@ -7,7 +7,6 @@ import mongoose from "mongoose";
  *      title: The course title
  *      description: the course description
  *      teacher: the teacher that owns the course
- *      students: the students that are enrolled in the course
  */
 const CourseSchema = new mongoose.Schema(
   {
@@ -26,15 +25,9 @@ const CourseSchema = new mongoose.Schema(
     },
     teacher: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, 'Every course must have a teacher'],
+      required: [true, "Every course must have a teacher"],
       ref: "User",
     },
-    students: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
   },
   { timestamps: true }
 );
