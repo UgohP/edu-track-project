@@ -77,10 +77,9 @@ export const getAllStudentsInCourse = async (req, res, next) => {
       throw error;
     }
 
-    const enrollments = await Enrollment.find({ course: course._id }).populate(
-      "student",
-      "name email"
-    );
+    const enrollments = await Enrollment.find({ course: course._id })
+      .populate("student", "name email")
+      .populate("course", "title description");
 
     res.status(200).json({
       success: true,
