@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { login, signup } from "../controllers/auth.controllers.js";
+import {
+  bulkSignup,
+  login,
+  singleSignup,
+} from "../controllers/auth.controllers.js";
 const authRouter = Router();
 
-authRouter.post("/single/signup", signup);
+authRouter.post("/signup/single", singleSignup);
 
-authRouter.post("/bulk/signup", signup);
+authRouter.post("/signup/bulk", bulkSignup);
 
 authRouter.post("/login", login);
 
