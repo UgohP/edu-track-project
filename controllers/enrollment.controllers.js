@@ -31,3 +31,63 @@ export const enrollCourse = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getMyCourses = async (req, res, next) => {
+  try {
+    if (req.user.role !== "Student") {
+      let error = new Error("Only students can view this");
+      error.statusCode = 403;
+      throw error;
+    }
+
+    const enrollments = await Enrollment.find({
+      student: req.user._id,
+    }).populate({
+      path: "course",
+      populate: { path: "teacher", select: "name email" },
+    });
+
+    res.status(200).json({
+      success: true,
+      count: enrollments.length,
+      data: enrollments,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllStudentsInCourse = async (req, res, next) => {
+  try {
+    if (req.user.role !== "Teacher") {
+      let error = new Error("Only teachers can view this");
+      error.statusCode = 403;
+      throw error;
+    }
+    const course = await Course.findById(req.params.courseId);
+    if (!course) {
+      let error = new Error("Course not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (!course.teacher.equals(req.user._id)) {
+      let error = new Error("Not authorised for this course");
+      error.statusCode = 403;
+      throw error;
+    }
+
+    const enrollments = await Enrollment.find({ course: course._id }).populate(
+      "student",
+      "name email"
+    );
+
+    res.status(200).json({
+      success: true,
+      count: enrollments.length,
+      data: enrollments,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
