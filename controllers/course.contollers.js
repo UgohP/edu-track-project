@@ -63,6 +63,9 @@ export const getCourseById = async (req, res, next) => {
   }
 };
 
+/**
+ * Api endpoint controller to UPDATE a particular course
+ */
 export const updateCourse = async (req, res, next) => {
   try {
     const course = await Course.findById(req.params.id);
@@ -96,6 +99,9 @@ export const updateCourse = async (req, res, next) => {
   }
 };
 
+/**
+ * Api endpoint controller to DELETE a particular course
+ */
 export const deleteCourse = async (req, res, next) => {
   try {
     const course = await Course.findById(req.params.id);

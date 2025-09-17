@@ -7,47 +7,52 @@ import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/env.js";
 /**
  * Api endpoint to signup a single user
  */
-// export const signup = async (req, res, next) => {
-//   const session = await mongoose.startSession();
-//   session.startTransaction();
-//   try {
-//     const { name, email, password, role } = req.body;
+export const singleSignup = async (req, res, next) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const { name, email, password, role } = req.body;
 
-//     const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email });
 
-//     if (existingUser) {
-//       let error = new Error("User already exists");
-//       error.statusCode = 409;
-//       throw error;
-//     }
+    if (existingUser) {
+      let error = new Error("User already exists");
+      error.statusCode = 409;
+      throw error;
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-//     const newUser = await User.create([{ name, email, password, role }], {
-//       session,
-//     });
+    const newUser = await User.create(
+      [{ name, email, password: hashedPassword, role }],
+      {
+        session,
+      }
+    );
 
-//     const token = jwt.sign({ userId: newUser[0]._id }, JWT_SECRET, {
-//       expiresIn: JWT_EXPIRES_IN,
-//     });
+    const token = jwt.sign({ userId: newUser[0]._id }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN,
+    });
 
-//     await session.commitTransaction();
-//     session.endSession();
+    await session.commitTransaction();
+    session.endSession();
 
-//     res.status(201).json({
-//       success: true,
-//       message: "User created successfully",
-//       data: { token, newUser },
-//     });
-//   } catch (error) {
-//     await session.abortTransaction();
-//     session.endSession();
-//     next(error);
-//   }
-// };
+    res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      data: { token, newUser },
+    });
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    next(error);
+  }
+};
 
 /**
  * Api endpoint to signup users in bulk
  */
-export const signup = async (req, res, next) => {
+export const bulkSignup = async (req, res, next) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
