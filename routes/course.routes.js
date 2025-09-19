@@ -19,6 +19,4 @@ courseRouter.put("/:id", authorize, updateCourse);
 
 courseRouter.delete("/:id", authorize, deleteCourse);
 
-// /api/v1/courses
-
 export default courseRouter;
