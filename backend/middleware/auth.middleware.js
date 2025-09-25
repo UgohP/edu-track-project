@@ -33,3 +33,14 @@ export const authorize = async (req, res, next) => {
       .json({ success: false, message: "Unauthorised", error: error.message });
   }
 };
+
+export const teacherMiddleware = (req, res, next) => {
+  if (req.user.role !== 'Teacher') return res.status(403).json({ success: false, message: 'Forbidden: Teacher only' });
+  next();
+};
+
+export const studentMiddleware = (req, res, next) => {
+  if (req.user.role !== 'Student') return res.status(403).json({ success: false, message: 'Forbidden: Student only' });
+  next();
+};
+

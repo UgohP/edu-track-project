@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import courseRouter from "./routes/course.routes.js";
 import enrollmentRouter from "./routes/enrollment.routes.js";
+import assignmentRouter from "./routes/assignment.routes.js";
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/course/enrollment", enrollmentRouter);
+app.use("/api/v1/courses/assignment", assignmentRouter);
+
 
 //Middleware
 app.use(errorMiddleware);
