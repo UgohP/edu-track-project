@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  edutrack-backend:
+    build: .
+    container_name: edutrack_backend
+    ports:
+      - "5500:5500"
+    env_file:
+      - .env.development.local
+    restart: always
