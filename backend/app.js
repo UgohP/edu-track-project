@@ -20,13 +20,11 @@ app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/course/enrollment", enrollmentRouter);
 app.use("/api/v1/courses/assignment", assignmentRouter);
 
-
 //Middleware
 app.use(errorMiddleware);
 
-app.listen(PORT, async () => {
+app.listen(PORT || 5500, "0.0.0.0", async () => {
   console.log(`Application is running on http://localhost:${PORT}`);
   await connectDB();
 });
-
 export default app;
